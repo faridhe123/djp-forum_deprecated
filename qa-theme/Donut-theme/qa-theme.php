@@ -14,6 +14,8 @@
      */
     @define( 'DONUT_THEME_BASE_DIR_NAME', basename( DONUT_THEME_BASE_DIR ) );
 
+    
+
     /**
      * Define the base directory of the theme
      */
@@ -27,6 +29,7 @@
     /**
      * Include the required files for the theme
      */
+    // echo DONUT_THEME_BASE_DIR;die();
     require_once DONUT_THEME_BASE_DIR . '/utils/qa-donut-utils.php';
     require_once DONUT_THEME_BASE_DIR . '/utils/donut-options.php';
     require_once DONUT_THEME_BASE_DIR . '/qa-donut-layer.php';
