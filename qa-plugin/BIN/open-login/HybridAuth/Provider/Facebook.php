@@ -1,6 +1,4 @@
 <?php
-
-
 /*!
 * Hybridauth
 * https://hybridauth.github.io | https://github.com/hybridauth/hybridauth
@@ -15,14 +13,36 @@ use Hybridauth\Adapter\OAuth2;
 use Hybridauth\Data;
 use Hybridauth\User;
 
-
-class Dejepe extends OAuth2
+/**
+ * Facebook OAuth2 provider adapter.
+ *
+ * Example:
+ *
+ *   $config = [
+ *       'callback' => Hybridauth\HttpClient\Util::getCurrentUrl(),
+ *       'keys'     => [ 'id' => '', 'secret' => '' ],
+ *       'scope'    => 'email, user_status, user_posts'
+ *   ];
+ *
+ *   $adapter = new Hybridauth\Provider\Facebook( $config );
+ *
+ *   try {
+ *       $adapter->authenticate();
+ *
+ *       $userProfile = $adapter->getUserProfile();
+ *       $tokens = $adapter->getAccessToken();
+ *       $response = $adapter->setUserStatus("Hybridauth test message..");
+ *   }
+ *   catch( Exception $e ){
+ *       echo $e->getMessage() ;
+ *   }
+ */
+class Facebook extends OAuth2
 {
-    
     /**
      * {@inheritdoc}
      */
-    protected $scope = '';
+    protected $scope = 'email, public_profile';
 
     /**
      * {@inheritdoc}
@@ -32,13 +52,12 @@ class Dejepe extends OAuth2
     /**
      * {@inheritdoc}
      */
-    // protected $authorizeUrl = 'https://djpconnectsso.pajak.go.id/oauth/authorize';
-    protected $authorizeUrl = 'https://sso.simulasikan.com/oauth/authorize';
+    protected $authorizeUrl = 'https://www.facebook.com/dialog/oauth';
 
     /**
      * {@inheritdoc}
      */
-    protected $accessTokenUrl = 'https://sso.simulasikan.com/oauth/token';
+    protected $accessTokenUrl = 'https://graph.facebook.com/oauth/access_token';
 
     /**
      * {@inheritdoc}
@@ -49,14 +68,12 @@ class Dejepe extends OAuth2
      * @var string Profile URL template as the fallback when no `link` returned from the API.
      */
     protected $profileUrlTemplate = 'https://www.facebook.com/%s';
-    protected $supportRequestState = false;
 
     /**
      * {@inheritdoc}
      */
     protected function initialize()
     {
-        // echo "AAAasdasasdasdA"; die();
         parent::initialize();
 
         // Require proof on all Facebook api calls
