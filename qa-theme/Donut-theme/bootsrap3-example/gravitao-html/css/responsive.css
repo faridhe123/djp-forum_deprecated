@@ -1,0 +1,168 @@
+/*--------------------------------------------------------------------- File Name: responsive.css ---------------------------------------------------------------------*/
+
+
+@media (min-width: 1200px) and (max-width: 1342px) {}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .text-bg h1 {
+        font-size: 100px;
+    }
+    .cons {
+        font-size: 69px;
+    }
+    .we_are .titlepage p {
+        padding-top: 40px;
+    }
+    .choose .choose_box {
+        padding: 0 20px;
+    }
+    .titlepage h2 {
+        font-size: 48px;
+    }
+    .bottom_form .enter {
+        width: 76%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    ul.informisition li a {
+        padding: 0 16px;
+    }
+    .text-bg h1 {
+        font-size: 85px;
+        line-height: 94px;
+    }
+    .cons {
+        font-size: 59px;
+    }
+    .main_form {
+        padding: 45px 20px;
+    }
+    .service .service_box h3 {
+        font-size: 16px;
+    }
+    .service .service_box p {
+        font-size: 15px;
+        line-height: 26px;
+    }
+    .we_are .titlepage p {
+        padding-top: 9px;
+        font-size: 16px;
+        line-height: 23px;
+    }
+    .choose .choose_box h3 {
+        font-size: 17px;
+    }
+    .choose .choose_box {
+        padding: 0 9px;
+    }
+    .titlepage h2 {
+        font-size: 41px;
+    }
+    .bottom_form .enter {
+        width: 58%;
+    }
+    .sub_btn {
+        max-width: 184px;
+    }
+    .cont h3 {
+        font-size: 38px;
+        line-height: 55px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    ul.informisition li {
+        padding-right: 30px;
+    }
+    ul.informisition li a {
+        padding: 0 5px;
+        font-size: 14px;
+    }
+    .banner_main {
+        padding: 190px 0;
+    }
+    .text-bg h1 {
+        font-size: 85px;
+        line-height: 94px;
+    }
+    .cons {
+        font-size: 59px;
+    }
+    .main_form {
+        padding: 45px 30px;
+        margin-top: 30px;
+    }
+    .titlepage h2 {
+        font-size: 34px;
+        line-height: 40px;
+        ;
+    }
+    .we_are {
+        padding-top: 70px;
+    }
+    .wedo_img {
+        margin-top: 30px;
+    }
+    .cont h3 {
+        font-size: 33px;
+        line-height: 50px;
+    }
+    .bottom_form .enter {
+        width: 71%;
+    }
+}
+
+@media (max-width: 575px) {
+    ul.informisition {
+        display: none;
+    }
+    .logo {
+        text-align: center !important;
+        float: inherit;
+    }
+    .banner_main {
+        padding: 150px 0;
+    }
+    .text-bg h1 {
+        font-size: 54px;
+        line-height: 72px;
+    }
+    .cons {
+        font-size: 41px;
+    }
+    .main_form {
+        padding: 45px 30px;
+        margin-top: 30px;
+    }
+    .we_are {
+        padding-top: 70px;
+    }
+    .wedo_img {
+        margin-top: 30px;
+    }
+    .choose_box {
+        padding: 0 29px !important;
+    }
+    .choose .choose_box h3 {
+        font-size: 18px;
+    }
+    .testimo_text p {
+        padding: 0 1px;
+    }
+    .titlepage h2 {
+        font-size: 29px;
+        line-height: 40px;
+    }
+    .cont h3 {
+        font-size: 18px;
+        line-height: 31px;
+    }
+    .bottom_form .enter {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .sub_btn {
+        margin-left: 0px;
+    }
+}
