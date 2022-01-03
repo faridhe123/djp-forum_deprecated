@@ -1,3 +1,25 @@
+/* CUSTOM START */
+
+.djpconnect {
+  background-color: #02275d !important;
+  opacity:1 !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  text-align: center;
+  border-style: none!important;
+}
+
+#qa-login {
+  background-color: #FFCA19;
+  /* opacity:1 ; */
+  color: black ;
+  font-weight: 600 ;
+  text-align: center;
+  border-style: none;
+}
+
+/* CUSTOM END */
+
 @media screen and (max-width: 767px) {
 }@media (min-width: 768px) {
 }@media (min-width: 768px) {
@@ -383,12 +405,12 @@ header#nav-header {
 }
 #login-dropdown-menu li .login-or {
   position: relative;
-  font-size: 18px;
+  font-size: 13px;
   color: #aaa;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 #login-dropdown-menu li .span-or {
   display: block;
@@ -568,10 +590,12 @@ header#nav-header {
 .donut-masthead {
   position: relative;
   margin-bottom: 20px;
-  color: #337ab7;
+  color: white;
+  background:#171717;
+  border-bottom: 5px solid #CCC;
 }
 .donut-masthead .page-title {
-  border-bottom: 1px solid #e2e2e2;
+  /* border-bottom: 1px solid #e2e2e2; */
   padding: 25px 40px 25px 0 ;
 }
 /* page title */
@@ -4015,3 +4039,6 @@ a.qa-browse-cat-link:visited {
   padding: 5px;
   margin: 10px 0;
 }
+
+
+
