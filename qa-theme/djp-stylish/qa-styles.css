@@ -11,6 +11,11 @@
 
 /* General page layout */
 
+.djpconnect {
+	background-color: #02275d !important;
+	color: white !important;
+}
+
 body {
 	background:#FFF;
 	margin:0;

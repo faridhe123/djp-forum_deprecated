@@ -64,10 +64,10 @@ class qa_html_theme extends qa_html_theme_base{
 
 		$this->output('<DIV CLASS="qa-header-wrapper" style="height: 90px;">');
 		$this->logo();
-		// $this->nav_user_search();
+		$this->nav_user_search();
 		
-		$this->nav('user');
-		$this->search();
+		// $this->nav('user');
+		// $this->search();
 		$this->header_clear();
 		$this->output('</DIV>');
 		
@@ -85,7 +85,7 @@ class qa_html_theme extends qa_html_theme_base{
 	}
 	function search_field($search)
 	{
-		$this->output('<INPUT '.$search['field_tags'].' VALUE="'.@$search['value'].'" CLASS="qa-search-field" placeholder="Looking for something?"/>');
+		$this->output('<INPUT '.$search['field_tags'].' VALUE="'.@$search['value'].'" CLASS="qa-search-field" placeholder="Cari topik diskusi"/>');
 	}
 
 	
