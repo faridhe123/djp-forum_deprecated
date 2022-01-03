@@ -1,168 +1,233 @@
 <?php
 
-/* !
- * Hybridauth
- * https://hybridauth.github.io | https://github.com/hybridauth/hybridauth
- *  (c) 2017 Hybridauth authors | https://hybridauth.github.io/license.html
- */
+
+/*!
+* Hybridauth
+* https://hybridauth.github.io | https://github.com/hybridauth/hybridauth
+*  (c) 2017 Hybridauth authors | https://hybridauth.github.io/license.html
+*/
 
 namespace Hybridauth\Provider;
 
-use Hybridauth\Adapter\OAuth2;
+use Hybridauth\Exception\InvalidArgumentException;
 use Hybridauth\Exception\UnexpectedApiResponseException;
+use Hybridauth\Adapter\OAuth2;
 use Hybridauth\Data;
 use Hybridauth\User;
 
-/**
- * DjpConnect OAuth2 provider adapter.
- *
- * Example:
- *
- *   $config = [
- *       'callback' => Hybridauth\HttpClient\Util::getCurrentUrl(),
- *       'keys'     => [ 'id' => '', 'secret' => '' ],
- *       'scope'    => 'https://www.googleapis.com/auth/userinfo.profile',
- *
- *        // google's custom auth url params
- *       'authorize_url_parameters' => [
- *              'approval_prompt' => 'force', // to pass only when you need to acquire a new refresh token.
- *              'access_type'     => ..,      // is set to 'offline' by default
- *              'hd'              => ..,
- *              'state'           => ..,
- *              // etc.
- *       ]
- *   ];
- *
- *   $adapter = new Hybridauth\Provider\DjpConnect( $config );
- *
- *   try {
- *       $adapter->authenticate();
- *
- *       $userProfile = $adapter->getUserProfile();
- *       $tokens = $adapter->getAccessToken();
- *       $contacts = $adapter->getUserContacts(['max-results' => 75]);
- *   }
- *   catch( Exception $e ){
- *       echo $e->getMessage() ;
- *   }
- */
-class DjpConnect extends OAuth2 {
 
-    /**
-     * {@inheritdoc}
-     */
-    public $scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $apiBaseUrl = 'https://www.googleapis.com/';
-
-    /**
-     * {@inheritdoc}
-     */
-    // protected $authorizeUrl = 'http://localhost:8081/oauth/authorize';
-    protected $authorizeUrl = 'https://djpconnectsso.pajak.go.id/oauth/authorize';
+class Djpconnect extends OAuth2
+{
     
-    protected $logoutUrl = 'https://djpconnectsso.pajak.go.id/logout';
-    
-    
-    protected $iamMethod = '';
-    protected $checkTokenParameters = [];
-    protected $iamParameter = [];
-    
-    protected $logoutMethod = '';
-    protected $logoutParameter = [];
-    
-    var $urlLogout = "https://djpconnectsso.pajak.go.id//logout";
+    /**
+     * {@inheritdoc}
+     */
+    protected $scope = '';
 
     /**
      * {@inheritdoc}
      */
-    protected $accessTokenUrl = 'https://djpconnectsso.pajak.go.id/oauth/token';
-    protected $checkTokenUrl = "https://djpconnectsso.pajak.go.id/oauth/check_token";
-    protected $iamUrl = "https://iam.simulasikan.com/api";
+    protected $apiBaseUrl = 'https://graph.facebook.com/v2.12/';
 
     /**
      * {@inheritdoc}
      */
-    protected $apiDocumentation = 'https://developers.google.com/identity/protocols/OAuth2';
+    // protected $authorizeUrl = 'https://djpconnectsso.pajak.go.id/oauth/authorize';
+    protected $authorizeUrl = 'https://sso.simulasikan.com/oauth/authorize';
 
     /**
      * {@inheritdoc}
      */
-    protected function initialize() {
+    protected $accessTokenUrl = 'https://sso.simulasikan.com/oauth/token';
 
+    /**
+     * {@inheritdoc}
+     */
+    protected $apiDocumentation = 'https://developers.facebook.com/docs/facebook-login/overview';
+
+    /**
+     * @var string Profile URL template as the fallback when no `link` returned from the API.
+     */
+    protected $profileUrlTemplate = 'https://www.facebook.com/%s';
+    protected $supportRequestState = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initialize()
+    {
+        // echo "AAAasdasasdasdA"; die();
         parent::initialize();
 
-        $this->AuthorizeUrlParameters += [
-            'access_type' => 'offline'
-        ];
-
-        $this->tokenRefreshParameters += [
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret
-        ];
-
-        $this->iamRequestHeader = [
-            // 'Authorization' => 'Bearer ' . $this->getStoredData('iamToken')
-            'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NDAwNzE1NTEsImV4cCI6MTY0MDA3NTE1MSwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9BRE1JTiJdLCJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiJjMmFkNDc5OS00Njc0LTRmYzEtOTcwYS05ZjgyNDc3NmFmM2EiLCJleHBpcmVkIjoxNjQwMDc1MTUxLCJwZWdhd2FpIjpudWxsfQ.TPruuFJzvg5OKx0ymnb5eabGsM7NwRbho-v7W1nkfvXo1D_M4ksW4gTDbPPRWdW0q0nn9TZVRsZwlXcQmJPDpkHb-IKSGsolT6nwF47UuqBI9E18iiNMcZ9ExabRonOuGcVNHu01cAREWdjuu2yssHEZwjSs-Xzps7MRlo1MRuLXJHSIMbGyA1PHj2FVosTfesRnXU1Ovf2ccPGlrlDGsEPR_2-WoiBNGLFk3cPm-dVUuhJYuDxn6BAovopSQOkIZaIwcNjCwtBFmIHDdUgc8115R7RYCxQFdzKn2y-wDF3J5IsEOLqENz3GfKE7iWTSp2iiMXE5EpRYebzZXWhOi-CUGxnK9vx4ui952Ct9ZV3OedF9u5HgID3xfaGtDgclJtuT9r-MclJbkjZ3ONDNw4FdDxJPCZAM-n--lwwhhT8j8egip5U5_wBBtCRwCNzXck81o4ia8HrQ3YXPxuatYvfmyV1V1GZtWLuEDRoIFs344fI7WRhTvHmA4onIczB3utucoePOgLCaT_zs3KcpQ8PI3AEao5BKHc5G1_PHpRnSTT9oOePyK_IXdGoeSqZEpWShBeCj962K4JQbKJAfLG_nfd62TQ3W9jW9gi6uwiTrQEt3zzSE4anU_G-T32l3b7-OzUHy-RMPvyCt0dy9YT1gK_szAyRwDM_yu1egj24'
-        ];
+        // Require proof on all Facebook api calls
+        // https://developers.facebook.com/docs/graph-api/securing-requests#appsecret_proof
+        if ($accessToken = $this->getStoredData('access_token')) {
+            $this->apiRequestParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken, $this->clientSecret);
+        }
     }
 
     /**
      * {@inheritdoc}
-     *
-     * See: https://developers.google.com/identity/protocols/OpenIDConnect#obtainuserinfo
      */
-    public function getUserProfile() {
-        var_dump("getUserProfile");
-        $response = $this->getUserData();
-
-
-
-//        $response = $this->apiRequest('oauth2/v3/userinfo');
+    public function getUserProfile()
+    {
+        $response = $this->apiRequest('me?fields=id,name,first_name,last_name,link,website,gender,locale,about,email,hometown,verified,birthday');
 
         $data = new Data\Collection($response);
 
-        $profile = json_decode($data->get('scalar'), TRUE);
-//        var_dump($profile['pegawai']['nama']);
-
-        if (!$data->exists('scalar')) {
+        if (!$data->exists('id')) {
             throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
         }
 
         $userProfile = new User\Profile();
 
-        $userProfile->identifier = $profile['pegawai']['nip9'];
-        $userProfile->firstName = $profile['pegawai']['nama'];
-//        $userProfile->lastName = $data->get('family_name');
-        $userProfile->displayName = $profile['pegawai']['nama'];
-//        $userProfile->photoURL = $data->get('picture');
-//        $userProfile->profileURL = $data->get('profile');
+        $userProfile->identifier = $data->get('id');
+        $userProfile->displayName = $data->get('name');
+        $userProfile->firstName = $data->get('first_name');
+        $userProfile->lastName = $data->get('last_name');
+        $userProfile->profileURL = $data->get('link');
+        $userProfile->webSiteURL = $data->get('website');
         $userProfile->gender = $data->get('gender');
         $userProfile->language = $data->get('locale');
+        $userProfile->description = $data->get('about');
         $userProfile->email = $data->get('email');
 
-        $userProfile->emailVerified = ($data->get('email_verified') === true || $data->get('email_verified') === 1) ? $userProfile->email : '';
+        // Fallback for profile URL in case Facebook does not provide "pretty" link with username (if user set it).
+        if (empty($userProfile->profileURL)) {
+            $userProfile->profileURL = $this->getProfileUrl($userProfile->identifier);
+        }
 
-        if ($this->config->get('photo_size')) {
-            $userProfile->photoURL .= '?sz=' . $this->config->get('photo_size');
+        $userProfile->region = $data->filter('hometown')->get('name');
+
+        $photoSize = $this->config->get('photo_size') ?: '150';
+
+        $userProfile->photoURL = $this->apiBaseUrl . $userProfile->identifier . '/picture?width=' . $photoSize . '&height=' . $photoSize;
+
+        $userProfile->emailVerified = $data->get('verified') == 1 ? $userProfile->email : '';
+
+        $userProfile = $this->fetchUserRegion($userProfile);
+
+        $userProfile = $this->fetchBirthday($userProfile, $data->get('birthday'));
+
+        return $userProfile;
+    }
+
+    /**
+     * Retrieve the user region.
+     *
+     * @param User\Profile $userProfile
+     *
+     * @return \Hybridauth\User\Profile
+     */
+    protected function fetchUserRegion(User\Profile $userProfile)
+    {
+        if (!empty($userProfile->region)) {
+            $regionArr = explode(',', $userProfile->region);
+
+            if (count($regionArr) > 1) {
+                $userProfile->city = trim($regionArr[0]);
+                $userProfile->country = trim($regionArr[1]);
+            }
         }
 
         return $userProfile;
     }
 
-    protected function getUserData() {
+    /**
+     * Retrieve the user birthday.
+     *
+     * @param User\Profile $userProfile
+     * @param string $birthday
+     *
+     * @return \Hybridauth\User\Profile
+     */
+    protected function fetchBirthday(User\Profile $userProfile, $birthday)
+    {
+        $result = (new Data\Parser())->parseBirthday($birthday, '/');
 
-        $urlGetUser = $this->iamUrl . "/users/" . $this->getStoredData('id_user');
-        var_dump("urlGetUser", $urlGetUser);
+        $userProfile->birthYear = (int)$result[0];
+        $userProfile->birthMonth = (int)$result[1];
+        $userProfile->birthDay = (int)$result[2];
 
-        $response = $this->httpClient->request(
-                $urlGetUser, $this->iamMethod, $this->iamParameter, $this->iamRequestHeader
-        );
+        return $userProfile;
+    }
 
-        $this->validateApiResponse('Unable to exchange code for API access token');
+    /**
+     * /v2.0/me/friends only returns the user's friends who also use the app.
+     * In the cases where you want to let people tag their friends in stories published by your app,
+     * you can use the Taggable Friends API.
+     *
+     * https://developers.facebook.com/docs/apps/faq#unable_full_friend_list
+     */
+    public function getUserContacts()
+    {
+        $contacts = [];
+
+        $apiUrl = 'me/friends?fields=link,name';
+
+        do {
+            $response = $this->apiRequest($apiUrl);
+
+            $data = new Data\Collection($response);
+
+            if (!$data->exists('data')) {
+                throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
+            }
+
+            if (!$data->filter('data')->isEmpty()) {
+                foreach ($data->filter('data')->toArray() as $item) {
+                    $contacts[] = $this->fetchUserContact($item);
+                }
+            }
+
+            if ($data->filter('paging')->exists('next')) {
+                $apiUrl = $data->filter('paging')->get('next');
+
+                $pagedList = true;
+            } else {
+                $pagedList = false;
+            }
+        } while ($pagedList);
+
+        return $contacts;
+    }
+
+    /**
+     * Parse the user contact.
+     *
+     * @param array $item
+     *
+     * @return \Hybridauth\User\Contact
+     */
+    protected function fetchUserContact($item)
+    {
+        $userContact = new User\Contact();
+
+        $item = new Data\Collection($item);
+
+        $userContact->identifier = $item->get('id');
+        $userContact->displayName = $item->get('name');
+
+        $userContact->profileURL = $item->exists('link')
+            ?: $this->getProfileUrl($userContact->identifier);
+
+        $userContact->photoURL = $this->apiBaseUrl . $userContact->identifier . '/picture?width=150&height=150';
+
+        return $userContact;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @deprecated since August 1, 2018. Scheduled for removal before Hybridauth 3.0.0.
+     *   See https://developers.facebook.com/docs/graph-api/changelog/breaking-changes#login-4-24 for more info.
+     */
+    public function setUserStatus($status, $pageId = 'me')
+    {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since August 1, 2018 and will be removed in Hybridauth 3.0.0.', E_USER_DEPRECATED);
+        $status = is_string($status) ? ['message' => $status] : $status;
+
+        $response = $this->apiRequest("{$pageId}/feed", 'POST', $status);
 
         return $response;
     }
@@ -170,70 +235,131 @@ class DjpConnect extends OAuth2 {
     /**
      * {@inheritdoc}
      */
-    public function getUserContacts($parameters = []) {
-        $parameters = ['max-results' => 500] + $parameters;
+    public function setPageStatus($status, $pageId)
+    {
+        $status = is_string($status) ? ['message' => $status] : $status;
 
-        // Google Gmail and Android contacts
-        if (false !== strpos($this->scope, '/m8/feeds/') || false !== strpos($this->scope, '/auth/contacts.readonly')) {
-            return $this->getGmailContacts($parameters);
+        // Post on user wall.
+        if ($pageId === 'me') {
+            return $this->setUserStatus($status, $pageId);
         }
+
+        // Retrieve writable user pages and filter by given one.
+        $pages = $this->getUserPages(true);
+        $pages = array_filter($pages, function ($page) use ($pageId) {
+            return $page->id == $pageId;
+        });
+
+        if (!$pages) {
+            throw new InvalidArgumentException('Could not find a page with given id.');
+        }
+
+        $page = reset($pages);
+
+        // Use page access token instead of user access token.
+        $headers = [
+            'Authorization' => 'Bearer ' . $page->access_token,
+        ];
+
+        // Refresh proof for API call.
+        $parameters = $status + [
+                'appsecret_proof' => hash_hmac('sha256', $page->access_token, $this->clientSecret),
+            ];
+
+        $response = $this->apiRequest("{$pageId}/feed", 'POST', $parameters, $headers);
+
+        return $response;
     }
 
     /**
-     * Retrieve Gmail contacts
+     * {@inheritdoc}
      */
-    protected function getGmailContacts($parameters = []) {
-        $url = 'https://www.google.com/m8/feeds/contacts/default/full?'
-                . http_build_query(array_replace(['alt' => 'json', 'v' => '3.0'], (array) $parameters));
+    public function getUserPages($writable = false)
+    {
+        $pages = $this->apiRequest('me/accounts');
 
-        $response = $this->apiRequest($url);
-
-        if (!$response) {
-            return [];
+        if (!$writable) {
+            return $pages->data;
         }
 
-        $contacts = [];
+        // Filter user pages by CREATE_CONTENT permission.
+        return array_filter($pages->data, function ($page) {
+            return in_array('CREATE_CONTENT', $page->perms);
+        });
+    }
 
-        if (isset($response->feed->entry)) {
-            foreach ($response->feed->entry as $idx => $entry) {
-                $uc = new User\Contact();
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserActivity($stream = 'me')
+    {
+        $apiUrl = $stream == 'me' ? 'me/feed' : 'me/home';
 
-                $uc->email = isset($entry->{'gd$email'}[0]->address) ? (string) $entry->{'gd$email'}[0]->address : '';
+        $response = $this->apiRequest($apiUrl);
 
-                $uc->displayName = isset($entry->title->{'$t'}) ? (string) $entry->title->{'$t'} : '';
-                $uc->identifier = ($uc->email != '') ? $uc->email : '';
-                $uc->description = '';
+        $data = new Data\Collection($response);
 
-                if (property_exists($response, 'website')) {
-                    if (is_array($response->website)) {
-                        foreach ($response->website as $w) {
-                            if ($w->primary == true) {
-                                $uc->webSiteURL = $w->value;
-                            }
-                        }
-                    } else {
-                        $uc->webSiteURL = $response->website->value;
-                    }
-                } else {
-                    $uc->webSiteURL = '';
-                }
-
-                $contacts[] = $uc;
-            }
+        if (!$data->exists('data')) {
+            throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
         }
 
-        return $contacts;
-    }
-    
-    function logout() {
-          var_dump("kucing");
-          die;
-           $response = $this->httpClient->request(
-                $urlGetUser, $this->logoutMethod, $this->logoutParameter, $this->iamRequestHeader
-        );
-      
-        
-        return void;
+        $activities = [];
+
+        foreach ($data->filter('data')->toArray() as $item) {
+            $activities[] = $this->fetchUserActivity($item);
+        }
+
+        return $activities;
     }
 
+    /**
+     *
+     */
+    protected function fetchUserActivity($item)
+    {
+        $userActivity = new User\Activity();
+
+        $item = new Data\Collection($item);
+
+        $userActivity->id = $item->get('id');
+        $userActivity->date = $item->get('created_time');
+
+        if ('video' == $item->get('type') || 'link' == $item->get('type')) {
+            $userActivity->text = $item->get('link');
+        }
+
+        if (empty($userActivity->text) && $item->exists('story')) {
+            $userActivity->text = $item->get('link');
+        }
+
+        if (empty($userActivity->text) && $item->exists('message')) {
+            $userActivity->text = $item->get('message');
+        }
+
+        if (!empty($userActivity->text) && $item->exists('from')) {
+            $userActivity->user->identifier = $item->filter('from')->get('id');
+            $userActivity->user->displayName = $item->filter('from')->get('name');
+
+            $userActivity->user->profileURL = $this->getProfileUrl($userActivity->user->identifier);
+
+            $userActivity->user->photoURL = $this->apiBaseUrl . $userActivity->user->identifier . '/picture?width=150&height=150';
+        }
+
+        return $userActivity;
+    }
+
+    /**
+     * Get profile URL.
+     *
+     * @param int $identity User ID.
+     * @return string|null NULL when identity is not provided.
+     */
+    protected function getProfileUrl($identity)
+    {
+        if (!is_numeric($identity)) {
+            return null;
+        }
+
+        return sprintf($this->profileUrlTemplate, $identity);
+    }
 }
