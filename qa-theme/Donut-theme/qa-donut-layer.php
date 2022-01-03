@@ -298,10 +298,10 @@
          */
         function feed_link()
         {
-            if ( $this->donut_page_has_feed() ) {
-                $feed = @$this->content['feed'];
-                $this->output( '<a href="' . $feed['url'] . '" title="' . @$feed['label'] . '" class="qa-rss-feed"><i class="fa fa-rss qa-rss-icon" ></i></a>' );
-            }
+            // if ( $this->donut_page_has_feed() ) {
+            //     $feed = @$this->content['feed'];
+            //     $this->output( '<a href="' . $feed['url'] . '" title="' . @$feed['label'] . '" class="qa-rss-feed"><i class="fa fa-rss qa-rss-icon" ></i></a>' );
+            // }
         }
 
         function header() // removes user navigation and search from header and replaces with custom header content. Also opens new <div>s
@@ -432,14 +432,14 @@
          */
         function feed()
         {
-            $feed = @$this->content['feed'];
+            // $feed = @$this->content['feed'];
 
-            if ( !empty( $feed ) ) {
-                $icon = donut_get_fa_icon( 'rss' );
-                $this->output( '<div class="qa-feed">' );
-                $this->output( '<a href="' . $feed['url'] . '" class="qa-feed-link"> <span class="icon-wrapper"> <span class="qa-feed-icon">' . $icon . ' </span></span>' . @$feed['label'] . '</a>' );
-                $this->output( '</div>' );
-            }
+            // if ( !empty( $feed ) ) {
+            //     $icon = donut_get_fa_icon( 'rss' );
+            //     $this->output( '<div class="qa-feed">' );
+            //     $this->output( '<a href="' . $feed['url'] . '" class="qa-feed-link"> <span class="icon-wrapper"> <span class="qa-feed-icon">' . $icon . ' </span></span>' . @$feed['label'] . '</a>' );
+            //     $this->output( '</div>' );
+            // }
         }
 
         /**

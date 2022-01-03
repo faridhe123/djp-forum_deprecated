@@ -603,10 +603,15 @@ header#nav-header {
   position: relative;
   padding: 25px 0;
 }
+.page-title a {
+  color: white !important;
+}
+
 .page-title h1 {
   clear: none;
   font-size: 30px;
   margin: 0;
+  width:700px;
 }
 /*Styling for the Onsite Noification*/
 #osnbox {
@@ -2639,7 +2644,9 @@ header#nav-header {
   position: absolute;
   right: 0;
   bottom: 5px;
+  margin-bottom: 40px;
 }
+
 .qa-favoriting .qa-waiting {
   font-size: 20px;
   position: absolute;
