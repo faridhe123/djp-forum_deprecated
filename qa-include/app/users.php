@@ -24,6 +24,11 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
+# Custom LEVEL
+define('QA_USER_LEVEL_ALL', 1);
+define('QA_USER_LEVEL_AR', 21);
+define('QA_USER_LEVEL_WP', 11);
+
 define('QA_USER_LEVEL_BASIC', 0);
 define('QA_USER_LEVEL_APPROVED', 10);
 define('QA_USER_LEVEL_EXPERT', 20);
