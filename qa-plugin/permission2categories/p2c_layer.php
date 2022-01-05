@@ -17,15 +17,6 @@ class qa_html_theme_layer extends qa_html_theme_base
 				QA_USER_LEVEL_ADMIN 	=> 'Admin+',
 				QA_USER_LEVEL_SUPER 	=> 'Super Admin'
 				);
-				
-		$permitoptions = array(
-				QA_USER_LEVEL_BASIC 	=> 'Anyone+',
-				QA_USER_LEVEL_EXPERT 	=> 'Expert+',
-				QA_USER_LEVEL_EDITOR	=> 'Editor+',
-				QA_USER_LEVEL_MODERATOR => 'Moderator+',
-				QA_USER_LEVEL_ADMIN 	=> 'Admin+',
-				QA_USER_LEVEL_SUPER 	=> 'Super Admin'
-				);
 		
 		if( $this->request == 'admin/categories' &&  qa_get('edit') >= 1 ) {
 			$p2c = qa_load_module('process', 'Permissions2Categories');
