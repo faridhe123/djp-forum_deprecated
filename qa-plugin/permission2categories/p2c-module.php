@@ -6,6 +6,7 @@ class p2c_category_permission
 	 * @var string - the meta-tag we insert into the title colunm 
 	 */
 	var $category_metakey = 'p2c_permission_level';
+	var $category_usertype_metakey = 'custom_user_type';
 	
 	/**
 	 * @var array - Cache for the category permission levels
@@ -28,7 +29,14 @@ class p2c_category_permission
 	{
 		$permit_level = qa_post_text('p2c_permit_level');
 		if ( qa_clicked('dosavecategory') && isset($permit_level) && !qa_clicked('docancel') ){
+			$user_type = qa_post_text('user_type');
+			echo "<pre>", print_r($user_type);die();
 			$this->edit_permit_level(qa_post_text('edit'), $this->category_metakey, qa_post_text('p2c_permit_level'));
+		}
+
+		$user_type = qa_post_text('user_type');
+		if ( qa_clicked('dosavecategory') && isset($user_type) && !qa_clicked('docancel') ){
+			$this->edit_user_type(qa_post_text('edit'), $this->category_usertype_metakey, qa_post_text('user_type'));
 		}
 	}
 	
@@ -42,6 +50,13 @@ class p2c_category_permission
 	 * @param string $value - Inserted into the content colunm 
 	 */
 	function edit_permit_level($categoryid, $key, $value)
+	{
+		require_once QA_INCLUDE_DIR.'qa-db-metas.php'; //make sure we have access to the functions we need.
+		
+		qa_db_categorymeta_set($categoryid, $key, $value);
+	}
+
+	function edit_user_type($categoryid, $key, $value)
 	{
 		require_once QA_INCLUDE_DIR.'qa-db-metas.php'; //make sure we have access to the functions we need.
 		

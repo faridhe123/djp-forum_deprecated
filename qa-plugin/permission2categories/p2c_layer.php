@@ -30,6 +30,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			$categoryvalue = $permitoptions[$p2c->category_permit_level(qa_get('edit'))];
 			// echo $categoryvalue;die();
 
+			
 			$this->content['form']['fields'][] = array(
 					'tags' => 'NAME="p2c_permit_level" ID="p2c_form"',
 					'label' => 'Select permission level requirement',
@@ -39,12 +40,31 @@ class qa_html_theme_layer extends qa_html_theme_base
 					);
 
 			$this->content['form']['fields'][] = array(
-					'tags' => 'NAME="custom Level DJP" ID="custom_level"',
-					'label' => 'Batasi akses hanya untuk',
-					'type' => 'select',
-					'options' => $useroptions,
-					'value' => $categoryvalue
+				'id' => 'user_type',
+				'label' => 'Pilih User Type (Kosongkan jika tidak ada batasan)',
+				'type' => 'static',
+				);
+	
+
+			$this->content['form']['fields'][] = array(
+					'tags' => 'NAME="user_type[]" ID="custom_level" VALUE="1"',
+					'label' => 'WP',
+					'type' => 'checkbox',
+					'value' => 0
 					);
+			$this->content['form']['fields'][] = array(
+					'tags' => 'NAME="user_type[]" ID="custom_level"  VALUE="2"',
+					'label' => 'Pegawai',
+					'type' => 'checkbox',
+					'value' => 0
+					);
+			$this->content['form']['fields'][] = array(
+					'tags' => 'NAME="user_type[]" ID="custom_level"  VALUE="3"',
+					'label' => 'AR',
+					'type' => 'checkbox',
+					'value' => 0
+					);
+			// echo "<pre>" , print_r($this->content['form']);die();
 		}
 	
 		qa_html_theme_base::doctype();
