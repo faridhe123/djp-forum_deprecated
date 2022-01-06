@@ -64,6 +64,20 @@ class qa_html_theme_layer extends qa_html_theme_base
 					'type' => 'checkbox',
 					'value' => 0
 					);
+
+			// $this->content['form']['fields'][] = array(
+			// 		'tags' => 'NAME="user_type[]" ID="custom_level"  VALUE="4"',
+			// 		'label' => 'Kepala Seksi',
+			// 		'type' => 'checkbox',
+			// 		'value' => 0
+			// 		);
+
+			// $this->content['form']['fields'][] = array(
+			// 		'tags' => 'NAME="user_type[]" ID="custom_level"  VALUE="5"',
+			// 		'label' => 'Kepala Kantor',
+			// 		'type' => 'checkbox',
+			// 		'value' => 0
+			// 		);
 			// echo "<pre>" , print_r($this->content['form']);die();
 		}
 	
