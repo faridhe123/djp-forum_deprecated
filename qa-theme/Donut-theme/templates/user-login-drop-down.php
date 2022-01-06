@@ -7,12 +7,13 @@
             <?php
                 if ( !empty( $this->content['navigation']['user'] ) ) {
                     $this->output( '<li class="open-login-buttons">' );
+                    // echo "<pre>",print_r($this->content['navigation']['user']);die();
                     foreach ( $this->content['navigation']['user'] as $k => $custom ) {
                         if ( ( $k != 'login' ) && ( $k != 'register' ) ) {
 
                             if ( $k == 'facebook-login' ) {
                                 //for the default facebook login plugin
-                                $this->output( '<div class="text-center">' );
+                                $this->output( '<div class="text-center ">' );
                                 $this->output( $custom['label'] );
                                 $this->output( '</div>' );
                                 continue;
@@ -20,30 +21,30 @@
 
                             //support for open login plugin
                             $icon = '';
-                            preg_match( '/class="([^"]+)"/', @$custom['label'], $class );
+                            // preg_match( '/class="([^"]+)"/', @$custom['label'], $class );
 
-                            if ( $k == 'facebook' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-facebook"';
-                            elseif ( $k == 'github' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-github"';
-                            elseif ( $k == 'foursquare' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-foursquare"';
-                            elseif ( $k == 'google' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-google"';
-                            elseif ( $k == 'googleplus' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-google-plus"';
-                            elseif ( $k == 'live' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-windows"';
-                            elseif ( $k == 'tumblr' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-tumblr"';
-                            elseif ( $k == 'yahoo' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-yahoo"';
-                            elseif ( $k == 'twitter' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-twitter"';
-                            elseif ( $k == 'linkedin' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-linkedin"';
-                            elseif ( $k == 'vk' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-vk"';
+                            // if ( $k == 'facebook' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-facebook"';
+                            // elseif ( $k == 'github' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-github"';
+                            // elseif ( $k == 'foursquare' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-foursquare"';
+                            // elseif ( $k == 'google' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-google"';
+                            // elseif ( $k == 'googleplus' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-google-plus"';
+                            // elseif ( $k == 'live' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-windows"';
+                            // elseif ( $k == 'tumblr' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-tumblr"';
+                            // elseif ( $k == 'yahoo' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-yahoo"';
+                            // elseif ( $k == 'twitter' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-twitter"';
+                            // elseif ( $k == 'linkedin' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-linkedin"';
+                            // elseif ( $k == 'vk' )
+                            //     $icon = 'class="' . @$class[1] . ' fa fa-vk"';
 
                             $pattern = "/_(?=[^>]*<)/";
 
@@ -57,8 +58,8 @@
             <?php if ( isset( $this->content['navigation']['user'] ) && count( $this->content['navigation']['user'] ) > 2 ): ?>
                 <li>
                     <div class="login-or">
-                        <hr class="hr-or colorgraph">
-                        <span class="span-or">or</span>
+                        <!-- <hr class="hr-or colorgraph"> -->
+                        <span class="span-or">atau</span>
                     </div>
                 </li>
             <?php endif ?>
