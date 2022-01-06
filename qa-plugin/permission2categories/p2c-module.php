@@ -63,7 +63,6 @@ class p2c_category_permission
 
 		foreach ($category_permissions as $value)
 			$this->category_permit_levels[$value['categoryid']] = $value['content'];
-		
 		return $this->category_permit_levels;
 	}
 
@@ -76,7 +75,6 @@ class p2c_category_permission
 
 		foreach ($category_permissions as $value)
 			$this->category_permit_jenis[$value['categoryid']] = $value['jenis'];
-		
 		return $this->category_permit_jenis;
 	}
 	
@@ -102,9 +100,9 @@ class p2c_category_permission
 		$all_permit_jenis = $this->category_permit_jenis;
 
 		if ( array_key_exists($categoryid, $all_permit_jenis) )
-			return $all_permit_jenis[$categoryid];
+			return json_decode($all_permit_jenis[$categoryid]);
 		else 
-			return 0;	
+			return array(0);	
 	}
 	
 	
@@ -118,18 +116,19 @@ class p2c_category_permission
 	{
 		$permit_level = $this->category_permit_level($categoryid);
 		$permit_jenis = $this->category_permit_jenis($categoryid);
-		// echo "<pre>" , print_r(qa_db_user_account_selectspec(qa_get_logged_in_userid(), true));
-		// echo "<pre>" , print_r(qa_get_logged_in_userid());
-		// echo "<pre>" , print_r(qa_get_logged_in_user_cache());
-		// echo "<pre>" , print_r(qa_db_get_pending_result('loggedinuser', qa_db_user_account_selectspec(qa_get_logged_in_userid(), true)));
-		$jenis_user = qa_get_logged_in_user_field('jenis');
-		// die();
 
-		// echo $jenis_user;die();
-		// echo "<pre>" , print_r($permit_jenis);die();
-		if ( qa_get_logged_in_level() >= $permit_level || $permit_level == 0 )
-			return true;
-		else
+		// echo var_dump(json_decode($permit_jenis));
+
+		// foreach($permit_jenis as $pj) {
+		// 	echo qa_get_logged_in_user_field('jenis') , " => " , $pj , "<br/>";
+		// }
+		
+		if ( qa_get_logged_in_level() >= $permit_level || $permit_level == 0 ){
+				if ( in_array(qa_get_logged_in_user_field('jenis'), $permit_jenis) || $permit_jenis == array(0) )
+				return true;
+			else
+				return false;
+		} else
 			return false;
 	}
 }
