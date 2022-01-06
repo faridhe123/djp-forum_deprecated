@@ -118,9 +118,12 @@ class p2c_category_permission
 	{
 		$permit_level = $this->category_permit_level($categoryid);
 		$permit_jenis = $this->category_permit_jenis($categoryid);
-		// echo "<pre>" , print_r(qa_get_logged_in_user_cache());die();
-		// echo "<pre>" , print_r(qa_get_logged_in_userid());die();
+		// echo "<pre>" , print_r(qa_db_user_account_selectspec(qa_get_logged_in_userid(), true));
+		// echo "<pre>" , print_r(qa_get_logged_in_userid());
+		// echo "<pre>" , print_r(qa_get_logged_in_user_cache());
+		// echo "<pre>" , print_r(qa_db_get_pending_result('loggedinuser', qa_db_user_account_selectspec(qa_get_logged_in_userid(), true)));
 		$jenis_user = qa_get_logged_in_user_field('jenis');
+		// die();
 
 		// echo $jenis_user;die();
 		// echo "<pre>" , print_r($permit_jenis);die();
