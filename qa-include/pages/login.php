@@ -59,7 +59,6 @@ if (qa_clicked('dologin') && (strlen($inemailhandle) || strlen($inpassword))) {
 		require_once QA_INCLUDE_DIR . 'db/users.php';
 		require_once QA_INCLUDE_DIR . 'db/selects.php';
 
-		require_once QA_INCLUDE_DIR.'../qa-plugin/qa-ldap-login/qa-ldap-process.php';
 		if (!qa_check_form_security_code('login', qa_post_text('code'))) {
 			$pageerror = qa_lang_html('misc/form_security_again');
 		}

@@ -31,6 +31,16 @@ list($fullcategory, $categories) = qa_db_select_with_pending(
 	qa_db_category_sub_selectspec($categoryid)
 );
 
+// Add [start]
+require_once QA_INCLUDE_DIR.'qa-app-users.php';
+require_once QA_PLUGIN_DIR.'permission2categories/p2c-module.php';
+$p2c = new p2c_category_permission();
+foreach($categories as $key => $category) {
+if(!$p2c->has_permit($category['categoryid']))
+unset($categories[$key]);
+}
+// Add [end]
+
 echo "QA_AJAX_RESPONSE\n1\n";
 
 echo qa_html(strtr(@$fullcategory['content'], "\r\n", '  ')); // category description
