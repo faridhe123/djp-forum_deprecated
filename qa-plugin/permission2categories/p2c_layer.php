@@ -17,16 +17,32 @@ class qa_html_theme_layer extends qa_html_theme_base
 				QA_USER_LEVEL_ADMIN 	=> 'Admin+',
 				QA_USER_LEVEL_SUPER 	=> 'Super Admin'
 				);
+
+		$useroptions = array(
+				QA_USER_TYPE_KASI 	=> 'Kepala Seksi',
+				QA_USER_TYPE_AR 	=> 'Account Representative',
+				QA_USER_TYPE_DJP 	=> 'Pegawai Direktorat Jenderal Pajak',
+				QA_USER_TYPE_WP 	=> 'Wajib Pajak'
+				);
 		
 		if( $this->request == 'admin/categories' &&  qa_get('edit') >= 1 ) {
 			$p2c = qa_load_module('process', 'Permissions2Categories');
 			$categoryvalue = $permitoptions[$p2c->category_permit_level(qa_get('edit'))];
+			// echo $categoryvalue;die();
 
 			$this->content['form']['fields'][] = array(
 					'tags' => 'NAME="p2c_permit_level" ID="p2c_form"',
 					'label' => 'Select permission level requirement',
 					'type' => 'select',
 					'options' => $permitoptions,
+					'value' => $categoryvalue
+					);
+
+			$this->content['form']['fields'][] = array(
+					'tags' => 'NAME="custom Level DJP" ID="custom_level"',
+					'label' => 'Batasi akses hanya untuk',
+					'type' => 'select',
+					'options' => $useroptions,
 					'value' => $categoryvalue
 					);
 		}

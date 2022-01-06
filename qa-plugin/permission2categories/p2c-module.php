@@ -11,11 +11,13 @@ class p2c_category_permission
 	 * @var array - Cache for the category permission levels
 	 */
 	var $category_permit_levels = array();
+	var $category_permit_jenis = array();
 	
 
 	function __construct () 
 	{
 		$this->get_category_permit_levels();
+		$this->get_category_permit_jenis();
 	}
 	
 	
@@ -64,6 +66,19 @@ class p2c_category_permission
 		
 		return $this->category_permit_levels;
 	}
+
+	function get_category_permit_jenis() 
+	{		
+		$category_permissions = qa_db_read_all_assoc(qa_db_query_sub('
+				SELECT categoryid, jenis 
+				FROM ^categorymetas 
+				WHERE title=\''. $this->category_metakey .'\''));
+
+		foreach ($category_permissions as $value)
+			$this->category_permit_jenis[$value['categoryid']] = $value['jenis'];
+		
+		return $this->category_permit_jenis;
+	}
 	
 	
 	/**
@@ -81,6 +96,16 @@ class p2c_category_permission
 		else 
 			return 0;	
 	}
+
+	function category_permit_jenis($categoryid) 
+	{
+		$all_permit_jenis = $this->category_permit_jenis;
+
+		if ( array_key_exists($categoryid, $all_permit_jenis) )
+			return $all_permit_jenis[$categoryid];
+		else 
+			return 0;	
+	}
 	
 	
 	/**
@@ -92,6 +117,13 @@ class p2c_category_permission
 	function has_permit($categoryid) 
 	{
 		$permit_level = $this->category_permit_level($categoryid);
+		$permit_jenis = $this->category_permit_jenis($categoryid);
+		// echo "<pre>" , print_r(qa_get_logged_in_user_cache());die();
+		// echo "<pre>" , print_r(qa_get_logged_in_userid());die();
+		$jenis_user = qa_get_logged_in_user_field('jenis');
+
+		// echo $jenis_user;die();
+		// echo "<pre>" , print_r($permit_jenis);die();
 		if ( qa_get_logged_in_level() >= $permit_level || $permit_level == 0 )
 			return true;
 		else

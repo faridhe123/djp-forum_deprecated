@@ -25,9 +25,11 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 # Custom LEVEL
-define('QA_USER_LEVEL_ALL', 1);
-define('QA_USER_LEVEL_AR', 21);
-define('QA_USER_LEVEL_WP', 11);
+define('QA_USER_TYPE_KEPALA_KANTOR', 5);
+define('QA_USER_TYPE_KASI', 4);
+define('QA_USER_TYPE_AR', 3);
+define('QA_USER_TYPE_DJP', 2); # Jika jabatan bukan Kepala Seksi / kepala Kantor / AR
+define('QA_USER_TYPE_WP', 1); # Jika tidak login dengan djpconnect
 
 define('QA_USER_LEVEL_BASIC', 0);
 define('QA_USER_LEVEL_APPROVED', 10);
@@ -103,7 +105,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 	function qa_get_logged_in_user_field($field)
 	{
 		$user = qa_get_logged_in_user_cache();
-
+		
 		return isset($user[$field]) ? $user[$field] : null;
 	}
 
@@ -794,6 +796,8 @@ function qa_get_logged_in_level()
 {
 	return qa_get_logged_in_user_field('level');
 }
+
+
 
 
 /**
